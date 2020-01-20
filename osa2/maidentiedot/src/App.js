@@ -11,7 +11,9 @@ function App() {
   const handleFilterChange = (event) => {
     console.log(event.target.value)
     setNewFilter(event.target.value)
-
+  }
+  const handleButton = name => {
+    setNewFilter(name)
   }
   useEffect(() => {
     axios
@@ -22,14 +24,11 @@ function App() {
       })
   }, [])
 
-
-
-
   return (
     <div >
       find countries
       <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
-      <Countries countries={countries} filter={newFilter} />
+      <Countries countries={countries} filter={newFilter} handleButton={handleButton} />
     </div>
   )
 }
@@ -43,7 +42,8 @@ const Filter = (props) => {
   )
 }
 
-const Countries = ({ countries, filter }) => {
+const Countries = ({ countries, filter, handleButton }) => {
+
   const countriesToShow = countries.filter(country =>
     country.name.toUpperCase().includes(filter.toUpperCase()))
 
@@ -68,8 +68,12 @@ const Countries = ({ countries, filter }) => {
     return (
       <div>
         {countriesToShow.map((country, name) =>
-          <Country key={name} country={country} />
+          <div>
+            <Country key={name} country={country} />
+            <button onClick={() => handleButton(country.name)} >show</button>
+          </div>
         )}
+
       </div>
     )
   } else {
@@ -80,16 +84,18 @@ const Countries = ({ countries, filter }) => {
 }
 
 const Country = ({ country }) => {
+
+
   return (
     <div>
       {country.name}
+
     </div>
   )
 }
 
 const CountryWithDetails = ({ country }) => {
   return (
-
     <div>
       <h2>{country.name}</h2>
       capital {country.capital} <br />
@@ -100,8 +106,6 @@ const CountryWithDetails = ({ country }) => {
           <li key={iso639_1}> {language.name} </li>
         )}
       </ul>
-
-
       <img width="150" heigth="250" src={country.flag} alt="flag" border="1"></img>
     </div>
 
