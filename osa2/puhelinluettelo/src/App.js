@@ -66,8 +66,6 @@ const App = () => {
       (person.name.toUpperCase().includes(event.target.value.toUpperCase())))
     setFiltered(filteredPeople)
     setNewFilter(event.target.value)
-
-
     console.log(filteredPeople)
   }
 
