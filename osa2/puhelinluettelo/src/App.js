@@ -19,7 +19,6 @@ const App = () => {
   }, [])
 
   const addPerson = (event) => {
-    //event.preventDefault()
     const phonebookObject = {
       name: newName,
       number: newNumber,
@@ -56,9 +55,26 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-
   const handleDeleteButton = id => {
-    deletePerson(id)
+    const name = persons.find(p => p.id === id).name
+    if (window.confirm(`Delete ${name}?`)) {
+      deletePerson(id)
+    }
+  }
+
+  const handleUpdate = (event) => {
+    const personToUpdate = persons.find(p => p.name === newName)
+    const updatedPerson = { ...personToUpdate, number: newNumber }
+    const id = personToUpdate.id
+
+    personService
+      .update(id, updatedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+      })
+      .catch(error => {
+        alert(`Something went wrong. :()`)
+      })
   }
 
   const checkIfAlreadyExcists = (event) => {
@@ -67,8 +83,12 @@ const App = () => {
     const match = persons.filter(person => (person.name.toUpperCase() === newName.toUpperCase()))
 
     if (match.length > 0) {
-      window.alert(`${newName} is already added to phonebook`)
+      const conf = window.confirm(`${newName} is already added to phonebook, replace the the old number with a new one?`)
+      if (conf) {
+        handleUpdate()
+      }
       setNewName('')
+      setNewNumber('')
     } else {
       addPerson()
     }
@@ -77,7 +97,6 @@ const App = () => {
 
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     if (event.target.value.length > 0) {
       setShowAll(false)
     } else {
@@ -87,7 +106,6 @@ const App = () => {
       (person.name.toUpperCase().includes(event.target.value.toUpperCase())))
     setFiltered(filteredPeople)
     setNewFilter(event.target.value)
-    console.log(filteredPeople)
   }
 
 
