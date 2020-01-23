@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Person from './components/Person'
 import personService from './services/persons'
+import Notification from './components/Notification'
+import Error from './components/Error'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -9,6 +11,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [notification, setNotification] = useState(null)
+  const [error, setError] = useState(null)
+
 
   useEffect(() => {
     personService
@@ -22,29 +27,62 @@ const App = () => {
     const phonebookObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      id: persons[persons.length - 1].id + 1,
     }
 
     personService
       .create(phonebookObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setNotification(`${newName} was added`)
         setNewName('')
         setNewNumber('')
       })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const deletePerson = (id) => {
     personService
       .remove(id)
-      .then(
+      .then(() => {
         setPersons(persons.filter(p => p.id !== id))
-      )
-      .catch(error => {
-        alert(
-          `The note you are trying to delete was already deleted from server`
-        )
+        setNotification(`Succesfully deleted`)
       })
+      .catch(error => {
+        setError(
+          `The person you are trying to delete was already deleted from server`
+        )
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
+      })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
+  const handleUpdate = (event) => {
+    const personToUpdate = persons.find(p => p.name === newName)
+    const updatedPerson = { ...personToUpdate, number: newNumber }
+    const id = personToUpdate.id
+
+    personService
+      .update(id, updatedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+        setNotification(`${updatedPerson.name} updated`)
+      })
+      .catch(error => {
+        setError(`${updatedPerson.name} has already been deleted from the server`)
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
+      })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const handleNameChange = (event) => {
@@ -60,21 +98,6 @@ const App = () => {
     if (window.confirm(`Delete ${name}?`)) {
       deletePerson(id)
     }
-  }
-
-  const handleUpdate = (event) => {
-    const personToUpdate = persons.find(p => p.name === newName)
-    const updatedPerson = { ...personToUpdate, number: newNumber }
-    const id = personToUpdate.id
-
-    personService
-      .update(id, updatedPerson)
-      .then(returnedPerson => {
-        setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
-      })
-      .catch(error => {
-        alert(`Something went wrong. :()`)
-      })
   }
 
   const checkIfAlreadyExcists = (event) => {
@@ -112,6 +135,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
+      <Error message={error} />
       filter with name <input value={newFilter}
         onChange={handleFilterChange} />
       <h3>Add an new person</h3>
