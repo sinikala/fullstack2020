@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,14 +11,42 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
+
+  const addPerson = (event) => {
+    //event.preventDefault()
+    const phonebookObject = {
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1,
+    }
+
+    personService
+      .create(phonebookObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+  }
+
+  const deletePerson = (id) => {
+    personService
+      .remove(id)
+      .then(
+        setPersons(persons.filter(p => p.id !== id))
+      )
+      .catch(error => {
+        alert(
+          `The note you are trying to delete was already deleted from server`
+        )
+      })
+  }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -26,6 +54,11 @@ const App = () => {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
+  }
+
+
+  const handleDeleteButton = id => {
+    deletePerson(id)
   }
 
   const checkIfAlreadyExcists = (event) => {
@@ -39,18 +72,6 @@ const App = () => {
     } else {
       addPerson()
     }
-
-  }
-
-  const addPerson = (event) => {
-    const phonebookObject = {
-      name: newName,
-      number: newNumber
-    }
-
-    setPersons(persons.concat(phonebookObject))
-    setNewName('')
-    setNewNumber('')
 
   }
 
@@ -83,20 +104,19 @@ const App = () => {
           onChange={handleNumberChange} /> </div> <br />
         <button type="submit">add</button>
       </form>
-      <ShowNumbers persons={showAll ? persons : filtered} />
+      <ShowNumbers persons={showAll ? persons : filtered} handleDeleteButton={handleDeleteButton} />
     </div>
   )
 
 }
 
 
-const ShowNumbers = ({ persons }) => {
-
+const ShowNumbers = ({ persons, handleDeleteButton }) => {
   return (
     <div>
       <h2>Numbers</h2>
-      {persons.map((person, name) =>
-        <Person key={name} person={person} />
+      {persons.map((person, id) =>
+        <Person key={id} person={person} handleDeleteButton={handleDeleteButton} />
       )}
     </div>
   )
