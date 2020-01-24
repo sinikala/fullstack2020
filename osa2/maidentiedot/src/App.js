@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import Weather from './components/Weather'
 
 
 
@@ -9,7 +10,6 @@ function App() {
   const [newFilter, setNewFilter] = useState('')
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     setNewFilter(event.target.value)
   }
   const handleButton = name => {
@@ -19,7 +19,6 @@ function App() {
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
-        console.log('promise fulfilled')
         setCountries(response.data)
       })
   }, [])
@@ -56,7 +55,6 @@ const Countries = ({ countries, filter, handleButton }) => {
   }
 
   else if (countriesToShow.length === 1) {
-    console.log(countriesToShow[0])
     return (
       <div>
         <CountryWithDetails country={countriesToShow[0]} />
@@ -73,7 +71,6 @@ const Countries = ({ countries, filter, handleButton }) => {
             <button onClick={() => handleButton(country.name)} >show</button>
           </div>
         )}
-
       </div>
     )
   } else {
@@ -84,7 +81,6 @@ const Countries = ({ countries, filter, handleButton }) => {
 }
 
 const Country = ({ country }) => {
-
 
   return (
     <div>
@@ -107,9 +103,8 @@ const CountryWithDetails = ({ country }) => {
         )}
       </ul>
       <img width="150" heigth="250" src={country.flag} alt="flag" border="1"></img>
+      <Weather capital={country.capital} />
     </div>
-
-
   )
 }
 
