@@ -38,6 +38,13 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        console.log(error.response.data)
+        setError(`${error.response.data.error}`)
+        setTimeout(() => {
+          setError(null)
+        }, 5000)
+      })
     setTimeout(() => {
       setNotification(null)
     }, 5000)
