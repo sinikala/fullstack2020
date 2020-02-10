@@ -1,0 +1,13 @@
+PUT http://localhost:3003/api/blogs/5e411b023ad7ff1f0283555a
+
+
+
+{
+  title: "Colour me",
+  author: "Anni",
+  url: "esimerkki.net",
+  likes: 1
+}
+
+
+
