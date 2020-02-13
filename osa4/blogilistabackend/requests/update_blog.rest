@@ -1,12 +1,11 @@
 PUT http://localhost:3003/api/blogs/5e411b023ad7ff1f0283555a
-
-
+Content-Type: application/json
 
 {
-  title: "Colour me",
-  author: "Anni",
-  url: "esimerkki.net",
-  likes: 1
+  "title": "Colour me",
+  "author": "Maija",
+  "url": "esimerkki.net",
+  "likes": 7
 }
 
 

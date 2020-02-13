@@ -144,14 +144,12 @@ test('deletion of a blog succeeds with a valid id', async () => {
   expect(contents).not.toContain(blogToDelete.title)
 })
 
-/*
+
 test('updating a blog succeeds with a valid id', async () => {
   const blogsInDB = await Blog.find({})
   //blogsInDB.map(b => b.toJSON())
 
   const likesAtBeginning = blogsInDB[0].likes
-
-  console.log(blogsInDB[0])
 
   const blogToUpdate = {
     id: blogsInDB[0]._id,
@@ -160,22 +158,21 @@ test('updating a blog succeeds with a valid id', async () => {
     url: blogsInDB[0].url,
     likes: blogsInDB[0].likes + 1
   }
-  console.log(blogToUpdate)
-
 
   await api
     .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogToUpdate)
     .expect(200 || 204)
 
 
   const blogsAtEnd = await Blog.find({})
   blogsAtEnd.map(b => b.toJSON())
 
-  expect(blogsAtEnd[0].likes).not.toBe(likesAtBeginning)
+  expect(blogsAtEnd[0].likes).toBe(likesAtBeginning + 1)
 
 
 })
-*/
+
 
 afterAll(() => {
   mongoose.connection.close()
