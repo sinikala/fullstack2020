@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Colour me",
-    "author": "Anni",
-    "url": "esimerkki.net",
-    "likes": 2000
+    "title": "Koodarin päiväkirja",
+    "author": "Valvoja",
+    "url": "koodarinpaivakirja.com",
+    "likes": 20,
+    "userId": "5e4532750633ba3dbe8a2e31"
 }
