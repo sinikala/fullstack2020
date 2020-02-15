@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFyY2giLCJpZCI6IjVlNDY2MjJkYWIwODgxMTkxNjNmN2UxMSIsImlhdCI6MTU4MTY3MDk5M30.jvkDdcaeR6rAM1XIfZaLGZj1MPyoZO0ucPXTo3wnQ1M
 
 {
-    "title": "Koodarin päiväkirja",
-    "author": "Valvoja",
-    "url": "koodarinpaivakirja.com",
-    "likes": 20,
-    "userId": "5e4532750633ba3dbe8a2e31"
+    "title": "Tee and Biscuits",
+    "author": "Royal tee ",
+    "url": "teatime.com",
+    "likes": 209
 }

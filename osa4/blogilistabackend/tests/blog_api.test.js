@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const loginRouter = require('../controllers/login')
 
 const api = supertest(app)
 
@@ -28,6 +30,15 @@ beforeEach(async () => {
 
   blogObject = new Blog(initialBlogs[1])
   await blogObject.save()
+
+  await User.deleteMany({})
+
+  const userToSave = { username: 'root', password: 'sekret' }
+
+  await api
+    .post('/api/users')
+    .send(userToSave)
+
 })
 
 test('blogs are returned as json', async () => {
@@ -54,6 +65,18 @@ test('a specific blog is within the returned blogs', async () => {
 })
 
 test('a valid blog can be added ', async () => {
+
+  const res = await api
+    .post('/api/login')
+    .send({ username: 'root', password: 'sekret' })
+
+  console.log(res.body)
+
+  const t = 'bearer '
+  //res.body.token
+  const token = t.concat(res.body.token)
+  console.log(token)
+
   const newBlog = {
     title: "Harpunsoittajan vaimo",
     author: "Antti Holma",
@@ -64,17 +87,19 @@ test('a valid blog can be added ', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', token)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs')
 
+  const response = await api.get('/api/blogs')
   const contents = response.body.map(r => r.title)
 
   expect(response.body.length).toBe(initialBlogs.length + 1)
   expect(contents).toContain(
     'Harpunsoittajan vaimo'
   )
+
 })
 
 describe('undefined', () => {
