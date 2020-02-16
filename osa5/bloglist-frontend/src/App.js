@@ -2,27 +2,25 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import Error from './components/Error'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  //const [newBlog, setNewBlog] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [notification, setNotification] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
+  const blogFormRef = React.createRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    blogService.getAll().then(blogs => {
+      const blogsWithViews = blogs.map(b => b = { ...b, fullView: false })
+      setBlogs(blogsWithViews)
+    })
   }, [])
 
   useEffect(() => {
@@ -56,27 +54,13 @@ const App = () => {
     }
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    console.log('adding blog')
-
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
 
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setAuthor('')
-        setTitle('')
-        setUrl('')
-        setNotification(`a new blog ${title} by ${author} added`)
-        setTimeout(() => {
-          setNotification(null)
-        }, 5000)
       })
       .catch(error => {
         setErrorMessage(
@@ -88,17 +72,11 @@ const App = () => {
       })
   }
 
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value)
-  }
-
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value)
-  }
+  const blogForm = () => (
+    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} setNotification={setNotification} />
+    </Togglable>
+  )
 
   const handleLogout = (event) => {
     window.localStorage.removeItem('loggedBlogappUser')
@@ -128,34 +106,43 @@ const App = () => {
       <button type="submit">login</button>
     </form>
   )
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title: &nbsp;
-        <input
-          value={title}
-          onChange={handleTitleChange}
-        /></div>
-      <div>
-        author: &nbsp;
-        <input
-          value={author}
-          onChange={handleAuthorChange}
-        /></div>
-      <div>
-        url: &nbsp;
-        <input
-          value={url}
-          onChange={handleUrlChange}
-        /></div>
-      <button type="submit">add new blog</button>
-    </form>
-  )
+
+  const toggleFullView = ({ blog }) => {
+    const changedBlog = { ...blog, fullView: !blog.fullView }
+    const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
+    setBlogs(editedBlogs)
+
+  }
+  const addLike = ({ blog }) => {
+    const changedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user
+    }
+
+    blogService
+      .update(changedBlog, blog.id)
+      .then()
+      .catch(error => {
+        setErrorMessage(
+          'Something went wrong with adding a like.'
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+
+    //vastaus täytyy ottaa talteen mutta vain lisätä taas view
+    const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
+    setBlogs(editedBlogs)
+
+  }
 
   if (user === null) {
     return (
       <div>
-        <Error message={errorMessage} />
         <h2>log in to application</h2>
         {loginForm()}
       </div>
@@ -171,7 +158,9 @@ const App = () => {
       {blogForm()}
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog}
+          toggleFullView={toggleFullView} addLike={addLike}
+        />
       )}
 
     </div>
