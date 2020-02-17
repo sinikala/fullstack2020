@@ -98,7 +98,7 @@ describe('adding a blog', () => {
     )
   })
 
-  test('fails with without token', async () => {
+  test('fails without token', async () => {
 
     const newBlog = {
       title: "Harpunsoittajan vaimo",
