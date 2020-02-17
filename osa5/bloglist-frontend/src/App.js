@@ -19,9 +19,11 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => {
       const blogsWithViews = blogs.map(b => b = { ...b, fullView: false })
+      blogsWithViews.sort((a, b) => { return b.likes - a.likes })
       setBlogs(blogsWithViews)
     })
   }, [])
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -70,6 +72,26 @@ const App = () => {
           setErrorMessage(null)
         }, 5000)
       })
+  }
+
+  const removeBlog = (blogObject) => {
+    blogService
+      .remove(blogObject)
+      .then(() => {
+        setBlogs(blogs.filter(b => b.id !== blogObject.id))
+        setNotification('Succesfully deleted')
+      })
+      .catch(error => {
+        setErrorMessage(
+          `The blog you are trying to delete was already deleted from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const blogForm = () => (
@@ -159,7 +181,7 @@ const App = () => {
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog}
-          toggleFullView={toggleFullView} addLike={addLike}
+          toggleFullView={toggleFullView} addLike={addLike} removeBlog={removeBlog} user={user}
         />
       )}
 
