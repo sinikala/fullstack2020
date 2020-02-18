@@ -207,7 +207,7 @@ test('deletion of a blog succeeds with a valid id', async () => {
   const contents = blogsAtEnd.map(r => r.title)
   expect(contents).not.toContain(blogToDelete.title)
 })
-*/
+
 
 test('updating a blog succeeds with a valid id', async () => {
   const blogsInDB = await Blog.find({})
@@ -236,7 +236,7 @@ test('updating a blog succeeds with a valid id', async () => {
 
 
 })
-
+*/
 
 afterAll(() => {
   mongoose.connection.close()
