@@ -64,7 +64,7 @@ const App = () => {
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(
           'Something went wrong with adding the blog.'
         )
@@ -81,7 +81,7 @@ const App = () => {
         setBlogs(blogs.filter(b => b.id !== blogObject.id))
         setNotification('Succesfully deleted')
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(
           `The blog you are trying to delete was already deleted from server`
         )
@@ -100,7 +100,7 @@ const App = () => {
     </Togglable>
   )
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }
@@ -109,7 +109,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username &nbsp;
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -118,7 +118,7 @@ const App = () => {
       </div>
       <div>
         password &nbsp;
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -147,7 +147,7 @@ const App = () => {
     blogService
       .update(changedBlog, blog.id)
       .then()
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(
           'Something went wrong with adding a like.'
         )

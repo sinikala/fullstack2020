@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 
 const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
@@ -39,23 +40,28 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
   if (blog.fullView === true) {
     return (
       <div style={blogStyle}>
-        {blog.title} - {blog.author} <button onClick={handle}>hide</button><br />
+        {blog.title} - {blog.author} <button onClick={handle}> hide </button><br />
         {blog.url} <br />
-        likes: {blog.likes} <button onClick={like}>like</button><br />
+        likes: {blog.likes} <button onClick={like}> like </button><br />
         added by: {blog.user.name} <br />
         {blog.user.name === user.name
-          ? <button /*style={removeButtonStyle} */ onClick={remove}>remove</button>
+          ? <button /*style={removeButtonStyle} */ onClick={remove}> remove </button>
           : <p></p>}
       </div>
     )
   } else {
     return (
       <div style={blogStyle}>
-        {blog.title} - {blog.author} <button onClick={handle}>view</button>
+        {blog.title} - {blog.author} <button onClick={handle}> view </button>
 
       </div>
     )
   }
+}
+Blog.propTypes = {
+  //buttonLabel: PropTypes.string.isRequired
+  removeBlog: PropTypes.func.isRequired,
+  addLike: PropTypes.func.isRequired
 }
 
 export default Blog
