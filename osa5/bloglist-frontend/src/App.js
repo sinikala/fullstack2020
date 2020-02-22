@@ -129,7 +129,8 @@ const App = () => {
     </form>
   )
 
-  const toggleFullView = ({ blog }) => {
+  //const toggleFullView = ({ blog }) => {
+  const toggleFullView = (blog) => {
     const changedBlog = { ...blog, fullView: !blog.fullView }
     const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
     setBlogs(editedBlogs)
@@ -181,12 +182,13 @@ const App = () => {
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog}
-          toggleFullView={toggleFullView} addLike={addLike} removeBlog={removeBlog} user={user}
+          toggleFullView={() => toggleFullView(blog)} addLike={addLike} removeBlog={removeBlog} user={user}
         />
       )}
 
     </div>
   )
 }
+//toggleFullView={toggleFullView} 
 
 export default App

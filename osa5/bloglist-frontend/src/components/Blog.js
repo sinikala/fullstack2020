@@ -25,10 +25,12 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
     addLike({ blog })
   }
 
+  /*
   const handle = (event) => {
     event.preventDefault()
     toggleFullView({ blog })
   }
+  */
   const remove = (event) => {
     event.preventDefault()
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
@@ -39,8 +41,8 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
 
   if (blog.fullView === true) {
     return (
-      <div style={blogStyle}>
-        {blog.title} - {blog.author} <button onClick={handle}> hide </button><br />
+      <div style={blogStyle} className='blog'>
+        {blog.title} - {blog.author} <button onClick={toggleFullView}> hide </button><br />
         {blog.url} <br />
         likes: {blog.likes} <button onClick={like}> like </button><br />
         added by: {blog.user.name} <br />
@@ -51,8 +53,8 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
     )
   } else {
     return (
-      <div style={blogStyle}>
-        {blog.title} - {blog.author} <button onClick={handle}> view </button>
+      <div style={blogStyle} className='blog'>
+        {blog.title} - {blog.author} <button onClick={toggleFullView}> view </button>
 
       </div>
     )
