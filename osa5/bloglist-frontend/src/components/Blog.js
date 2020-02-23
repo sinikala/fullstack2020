@@ -23,7 +23,6 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
   const [fullView, toggleFullView] = useState(false)
 
   const like = (event) => {
-    event.preventDefault()
     addLike({ blog })
   }
 
@@ -32,7 +31,6 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       removeBlog(blog)
     }
-
   }
 
   if (fullView === true) {

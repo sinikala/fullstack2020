@@ -3,8 +3,6 @@ import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import BlogForm from './BlogForm'
 
-//const author = component.container.querySelector('#author')
-
 test('<BlogForm /> updates parent state and calls onSubmit', () => {
   const createBlog = jest.fn()
   const setNotification = jest.fn()
@@ -35,8 +33,6 @@ test('<BlogForm /> updates parent state and calls onSubmit', () => {
   //component.debug()
 
   expect(createBlog.mock.calls.length).toBe(1)
-
-  //console.log('mock', createBlog.mock.calls[0][0])
   expect(createBlog.mock.calls[0][0].title).toBe('Kinuskikissa leipoo')
   expect(createBlog.mock.calls[0][0].author).toBe('Kinuskikissa')
   expect(createBlog.mock.calls[0][0].url).toBe('www.kinuskikissa.fi')

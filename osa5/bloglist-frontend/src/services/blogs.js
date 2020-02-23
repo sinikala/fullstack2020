@@ -21,10 +21,12 @@ const create = async newObject => {
 }
 
 const update = async (newObject, id) => {
+  console.log('nO', newObject, id)
   const url = baseUrl.concat(`/${id}`)
   const response = await axios.put(url, newObject)
   return response.data
 }
+
 const remove = async (newObject) => {
   const config = {
     headers: { Authorization: token },

@@ -20,7 +20,6 @@ const App = () => {
     blogService.getAll().then(blogs => {
       blogs.sort((a, b) => { return b.likes - a.likes })
       setBlogs(blogs)
-      console.log('blogss', blogs)
     })
   }, [])
 
@@ -135,7 +134,7 @@ const App = () => {
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
-      user: blog.user
+      user: blog.user.id
     }
 
     blogService
@@ -143,9 +142,6 @@ const App = () => {
       .then(returnedBlog => {
         const editedBlogs = blogs.map(b => b.id !== blog.id ? b : returnedBlog)
         setBlogs(editedBlogs)
-        // setBlogs(blogs.map(b => b.id !== changedBlog.id ? b : returnedBlog))
-        console.log('blogs', blogs)
-        console.log('ret', returnedBlog)
       })
       .catch(() => {
         setErrorMessage(
@@ -155,11 +151,8 @@ const App = () => {
           setErrorMessage(null)
         }, 5000)
       })
-
-
     //const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
     //setBlogs(editedBlogs)
-
   }
 
   if (user === null) {
@@ -184,10 +177,8 @@ const App = () => {
           addLike={addLike} removeBlog={removeBlog} user={user}
         />
       )}
-
     </div>
   )
 }
-//toggleFullView={toggleFullView} 
 
 export default App
