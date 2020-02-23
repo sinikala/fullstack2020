@@ -18,9 +18,9 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      const blogsWithViews = blogs.map(b => b = { ...b, fullView: false })
-      blogsWithViews.sort((a, b) => { return b.likes - a.likes })
-      setBlogs(blogsWithViews)
+      blogs.sort((a, b) => { return b.likes - a.likes })
+      setBlogs(blogs)
+      console.log('blogss', blogs)
     })
   }, [])
 
@@ -129,13 +129,6 @@ const App = () => {
     </form>
   )
 
-  //const toggleFullView = ({ blog }) => {
-  const toggleFullView = (blog) => {
-    const changedBlog = { ...blog, fullView: !blog.fullView }
-    const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
-    setBlogs(editedBlogs)
-
-  }
   const addLike = ({ blog }) => {
     const changedBlog = {
       title: blog.title,
@@ -147,7 +140,13 @@ const App = () => {
 
     blogService
       .update(changedBlog, blog.id)
-      .then()
+      .then(returnedBlog => {
+        const editedBlogs = blogs.map(b => b.id !== blog.id ? b : returnedBlog)
+        setBlogs(editedBlogs)
+        // setBlogs(blogs.map(b => b.id !== changedBlog.id ? b : returnedBlog))
+        console.log('blogs', blogs)
+        console.log('ret', returnedBlog)
+      })
       .catch(() => {
         setErrorMessage(
           'Something went wrong with adding a like.'
@@ -157,9 +156,9 @@ const App = () => {
         }, 5000)
       })
 
-    //vastaus täytyy ottaa talteen mutta vain lisätä taas view
-    const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
-    setBlogs(editedBlogs)
+
+    //const editedBlogs = blogs.map(b => b.id !== changedBlog.id ? b : changedBlog)
+    //setBlogs(editedBlogs)
 
   }
 
@@ -182,7 +181,7 @@ const App = () => {
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog}
-          toggleFullView={() => toggleFullView(blog)} addLike={addLike} removeBlog={removeBlog} user={user}
+          addLike={addLike} removeBlog={removeBlog} user={user}
         />
       )}
 

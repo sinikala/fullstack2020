@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 
-const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
+const Blog = ({ blog, addLike, removeBlog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -20,17 +20,13 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
     borderWidth: 0.5,
   }
 */
+  const [fullView, toggleFullView] = useState(false)
+
   const like = (event) => {
     event.preventDefault()
     addLike({ blog })
   }
 
-  /*
-  const handle = (event) => {
-    event.preventDefault()
-    toggleFullView({ blog })
-  }
-  */
   const remove = (event) => {
     event.preventDefault()
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
@@ -39,10 +35,10 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
 
   }
 
-  if (blog.fullView === true) {
+  if (fullView === true) {
     return (
       <div style={blogStyle} className='blog'>
-        {blog.title} - {blog.author} <button onClick={toggleFullView}> hide </button><br />
+        {blog.title} - {blog.author} <button onClick={() => toggleFullView(!fullView)}> hide </button><br />
         {blog.url} <br />
         likes: {blog.likes} <button onClick={like}> like </button><br />
         added by: {blog.user.name} <br />
@@ -54,7 +50,7 @@ const Blog = ({ blog, toggleFullView, addLike, removeBlog, user }) => {
   } else {
     return (
       <div style={blogStyle} className='blog'>
-        {blog.title} - {blog.author} <button onClick={toggleFullView}> view </button>
+        {blog.title} - {blog.author} <button onClick={() => toggleFullView(!fullView)}> view </button>
 
       </div>
     )

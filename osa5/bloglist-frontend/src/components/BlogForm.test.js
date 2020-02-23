@@ -32,11 +32,11 @@ test('<BlogForm /> updates parent state and calls onSubmit', () => {
 
   fireEvent.submit(form)
 
-  component.debug()
+  //component.debug()
 
   expect(createBlog.mock.calls.length).toBe(1)
 
-  console.log('mock', createBlog.mock.calls[0][0])
+  //console.log('mock', createBlog.mock.calls[0][0])
   expect(createBlog.mock.calls[0][0].title).toBe('Kinuskikissa leipoo')
   expect(createBlog.mock.calls[0][0].author).toBe('Kinuskikissa')
   expect(createBlog.mock.calls[0][0].url).toBe('www.kinuskikissa.fi')
