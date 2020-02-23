@@ -109,6 +109,7 @@ const App = () => {
       <div>
         username &nbsp;
         <input
+          id='username'
           type="text"
           value={username}
           name="Username"
@@ -118,13 +119,14 @@ const App = () => {
       <div>
         password &nbsp;
         <input
+          id='password'
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id='login-button' type="submit">login</button>
     </form>
   )
 
@@ -158,18 +160,20 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <h2>log in to application</h2>
+        <h2>Blog app</h2>
+        <Error message={errorMessage} />
+        <h3>log in to application</h3>
         {loginForm()}
       </div>
     )
   }
   return (
     <div>
-      <Error message={errorMessage} />
-      <Notification message={notification} />
       {user.name} logged in &nbsp;
       <button onClick={() => handleLogout()}>logout</button>
-      <h2>create new blog </h2>
+      <Error message={errorMessage} />
+      <Notification message={notification} />
+      <p> </p>
       {blogForm()}
       <h2>blogs</h2>
       {blogs.map(blog =>

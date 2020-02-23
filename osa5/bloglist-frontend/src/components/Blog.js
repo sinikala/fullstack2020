@@ -40,16 +40,15 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
         {blog.url} <br />
         likes: {blog.likes} <button onClick={like}> like </button><br />
         added by: {blog.user.name} <br />
-        {blog.user.name === user.name
-          ? <button /*style={removeButtonStyle} */ onClick={remove}> remove </button>
+        {blog.user.username === user.username
+          ? <button id='remove-button' /*style={removeButtonStyle} */ onClick={remove}> remove </button>
           : <p></p>}
       </div>
     )
   } else {
     return (
       <div style={blogStyle} className='blog'>
-        {blog.title} - {blog.author} <button onClick={() => toggleFullView(!fullView)}> view </button>
-
+        {blog.title} - {blog.author} <button id='view-button' onClick={() => toggleFullView(!fullView)}> view </button>
       </div>
     )
   }
@@ -61,3 +60,5 @@ Blog.propTypes = {
 }
 
 export default Blog
+
+

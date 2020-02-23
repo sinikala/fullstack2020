@@ -38,6 +38,7 @@ const BlogForm = ({ createBlog, setNotification }) => {
 
   return (
     <div>
+      <h2>create new blog </h2>
       <form onSubmit={addBlog}>
         <div>
           title: &nbsp;
@@ -60,7 +61,7 @@ const BlogForm = ({ createBlog, setNotification }) => {
             value={url}
             onChange={handleUrlChange}
           /></div>
-        <button type="submit">add new blog</button>
+        <button id='submit-blog' type="submit">add new blog</button>
       </form>
     </div>
   )
