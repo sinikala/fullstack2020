@@ -31,7 +31,6 @@ describe('Blog app', function () {
       cy.get('#username').type('mluukkai')
       cy.get('#password').type('hups')
       cy.get('#login-button').click()
-
       cy.contains('wrong credentials')
     })
   })
