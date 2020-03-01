@@ -1,32 +1,27 @@
 const reducer = (state = '', action) => {
   switch (action.type) {
-    case 'VOTENOTE':
-      return `you voted ${action.data}`
+    case 'SET_NOTE':
+      return action.data
     case 'HIDE':
       return ''
-    case 'NEWNOTE':
-      return `you added new note ${action.data}`
     default: return state
   }
 }
 
-export const notifyVote = (content) => {
-  return {
-    type: 'VOTENOTE',
-    data: content
+export const setNotification = (content, timer) => {
+  console.log('content', content)
+  return async dispatch => {
+    dispatch({
+      type: 'SET_NOTE',
+      data: content
+    })
+
+    await new Promise(resolve => setTimeout(resolve, timer * 1000))
+
+    dispatch({
+      type: 'HIDE'
+    })
   }
 }
 
-export const notifyNew = (content) => {
-  return {
-    type: 'NEWNOTE',
-    data: content
-  }
-}
-
-export const hideNotification = () => {
-  return {
-    type: 'HIDE'
-  }
-}
 export default reducer
