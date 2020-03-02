@@ -1,3 +1,4 @@
+
 const reducer = (state = '', action) => {
   switch (action.type) {
     case 'SET_NOTE':
@@ -8,15 +9,19 @@ const reducer = (state = '', action) => {
   }
 }
 
+//let timerStore
+
 export const setNotification = (content, timer) => {
-  console.log('content', content)
+  //window.clearTimeout(timerStore)
   return async dispatch => {
     dispatch({
       type: 'SET_NOTE',
       data: content
     })
 
-    await new Promise(resolve => setTimeout(resolve, timer * 1000))
+    //timerStore = await new Promise(resolve => window.setTimeout(resolve, timer * 1000))
+    await new Promise(resolve => window.setTimeout(resolve, timer * 1000))
+    // console.log('timer', timerStore)
 
     dispatch({
       type: 'HIDE'
