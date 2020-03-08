@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import userService from './services/users'
 import BlogForm from './components/BlogForm'
+import User from './components/User'
 import Notification from './components/Notification'
 import UserList from './components/UserList'
 import Togglable from './components/Togglable'
@@ -174,6 +175,33 @@ const App = (props) => {
       })
   }
 
+  const match = useRouteMatch('/users/:id')
+  const userToView = match
+    ? users.find(u => u.id === match.params.id)
+    : null
+
+  const Menu = () => {
+    const padding = {
+      paddingRight: 5
+    }
+
+    const background = {
+      backgroundColor: 'lightblue'
+    }
+    const buttonStyle = {
+      borderRadius: 8,
+    }
+
+    return (
+      <div style={background}>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user.name} logged in &nbsp;
+        <button style={buttonStyle} onClick={() => handleLogout()}>logout</button>
+      </div>
+    )
+  }
+
   if (user === null) {
     return (
       <div>
@@ -184,20 +212,28 @@ const App = (props) => {
       </div>
     )
   }
+
   return (
     <div>
-      {user.name} logged in &nbsp;
-      <button onClick={() => handleLogout()}>logout</button>
+      <Menu />
+      <h2>Blog app</h2>
+
       <Error message={errorMessage} />
       <Notification />
       <p> </p>
       <Switch>
+
+        <Route path="/users/:id">
+          <User user={userToView} />
+        </Route>
+
         <Route path="/users">
           <UserList users={users} />
         </Route>
+
         <Route path="/">
           {blogForm()}
-          <h2>blogs</h2>
+          <h3>blogs</h3>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog}
               addLike={addLike} removeBlog={removeBlog} user={user}
