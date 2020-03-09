@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import {
+  useHistory,
+} from "react-router-dom"
 
 
 const Blog = ({ blog, addLike, removeBlog, user }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    borderRadius: 8,
-    border: 'dashed',
-    borderColor: 'lightblue',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+  const history = useHistory()
 
-  const [fullView, toggleFullView] = useState(false)
+  if (!blog) {
+    return null
+  }
 
   const like = () => {
     addLike({ blog })
@@ -23,34 +21,37 @@ const Blog = ({ blog, addLike, removeBlog, user }) => {
     event.preventDefault()
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       removeBlog(blog)
+      history.push('/')
     }
   }
 
-  if (fullView === true) {
-    return (
-      <div style={blogStyle} className='blog'>
-        {blog.title} - {blog.author} <button onClick={() => toggleFullView(!fullView)}> hide </button><br />
-        {blog.url} <br />
-        likes: {blog.likes} <button onClick={like}> like </button><br />
-        added by: {blog.user.name} <br />
-        {blog.user.username === user.username
-          ? <button id='remove-button' onClick={remove}> remove </button>
-          : <p></p>}
-      </div>
-    )
-  } else {
-    return (
-      <div style={blogStyle} className='blog'>
-        {blog.title} - {blog.author} <button id='view-button' onClick={() => toggleFullView(!fullView)}> view </button>
-      </div>
-    )
-  }
+
+  return (
+    <BlogStyle className='blog'>
+      <h2>{blog.title} by {blog.author}</h2>
+      <a href={blog.url}>{blog.url}</a> <br />
+      likes: {blog.likes} <button onClick={like}> like </button><br />
+      added by: {blog.user.name} <br />
+      {blog.user.username === user.username
+        ? <button id='remove-button' onClick={remove}> remove </button>
+        : <p></p>}
+    </BlogStyle>
+  )
+
 }
+
 Blog.propTypes = {
   //buttonLabel: PropTypes.string.isRequired
   removeBlog: PropTypes.func.isRequired,
   addLike: PropTypes.func.isRequired
 }
+
+const BlogStyle = styled.div`
+border-radius: 3px;
+padding: 0.5em 1em;
+border: 1px solid Plum;
+margin: 0.5em;
+`
 
 export default Blog
 

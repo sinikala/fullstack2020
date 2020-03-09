@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
+import styled from 'styled-components'
 
 
 const BlogForm = (props) => {
@@ -60,12 +61,22 @@ const BlogForm = (props) => {
             value={url}
             onChange={handleUrlChange}
           /></div>
-        <button id='submit-blog' type="submit">add new blog</button>
+        <Button id='submit-blog' type="submit">add new blog</Button>
       </form>
     </div>
   )
 }
 
+const Button = styled.button`
+background: Ivory;
+&:hover{
+  background:Plum;
+}
+border-radius: 3px;
+margin: 1em;
+padding: 0.25em 1em;
+border: 2px solid Plum;
+`
 
 export default connect(
   null,

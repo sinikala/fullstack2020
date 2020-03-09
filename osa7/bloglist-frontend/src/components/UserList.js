@@ -1,5 +1,5 @@
 import React from 'react'
-
+import styled from 'styled-components'
 import {
   Link,
 } from "react-router-dom"
@@ -7,7 +7,7 @@ import {
 const UserList = ({ users }) => {
 
   return (
-    <div>
+    <UserStyle>
       <h2>Users</h2>
       <table id='users'>
         <tbody>
@@ -16,9 +16,7 @@ const UserList = ({ users }) => {
         </tbody>
 
       </table>
-
-
-    </div>
+    </UserStyle>
   )
 }
 
@@ -34,4 +32,10 @@ const renderUser = (users) => {
 }
 
 
+const UserStyle = styled.div`
+border-radius: 3px;
+padding: 0.5em 1em;
+border: 1px solid Plum;
+margin: 0.5em;
+`
 export default UserList

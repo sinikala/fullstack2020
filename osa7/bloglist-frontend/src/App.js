@@ -7,18 +7,18 @@ import BlogForm from './components/BlogForm'
 import User from './components/User'
 import Notification from './components/Notification'
 import UserList from './components/UserList'
+import BlogList from './components/BlogList'
 import Togglable from './components/Togglable'
 import Error from './components/Error'
 import { connect } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import styled from 'styled-components'
 
 import {
   Switch,
   Route,
   Link,
-  Redirect,
   useRouteMatch,
-  useHistory,
 } from "react-router-dom"
 
 
@@ -54,6 +54,7 @@ const App = (props) => {
       setUsers(users)
     })
   }, [])
+
 
 
   const handleLogin = async (event) => {
@@ -175,46 +176,51 @@ const App = (props) => {
       })
   }
 
-  const match = useRouteMatch('/users/:id')
-  const userToView = match
-    ? users.find(u => u.id === match.params.id)
+  const userMatch = useRouteMatch('/users/:id')
+  const userToView = userMatch
+    ? users.find(u => u.id === userMatch.params.id)
+    : null
+
+  const blogMatch = useRouteMatch('/blogs/:id')
+  const blogToView = blogMatch
+    ? blogs.find(b => b.id === blogMatch.params.id)
     : null
 
   const Menu = () => {
     const padding = {
       paddingRight: 5
     }
-
-    const background = {
-      backgroundColor: 'lightblue'
-    }
+    /*
+        const background = {
+          backgroundColor: 'lightblue'
+        } */
     const buttonStyle = {
       borderRadius: 8,
     }
 
     return (
-      <div style={background}>
+      <Navigation>
         <Link style={padding} to="/">blogs</Link>
         <Link style={padding} to="/users">users</Link>
         {user.name} logged in &nbsp;
-        <button style={buttonStyle} onClick={() => handleLogout()}>logout</button>
-      </div>
+        <Button onClick={() => handleLogout()}>logout</Button>
+      </Navigation>
     )
   }
 
   if (user === null) {
     return (
-      <div>
+      <Page>
         <h2>Blog app</h2>
         <Error message={errorMessage} />
         <h3>log in to application</h3>
         {loginForm()}
-      </div>
+      </Page>
     )
   }
 
   return (
-    <div>
+    <Page>
       <Menu />
       <h2>Blog app</h2>
 
@@ -231,19 +237,43 @@ const App = (props) => {
           <UserList users={users} />
         </Route>
 
+        <Route path="/blogs/:id">
+          <Blog blog={blogToView} addLike={addLike} removeBlog={removeBlog} user={user} />
+        </Route>
+
         <Route path="/">
           {blogForm()}
           <h3>blogs</h3>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog}
-              addLike={addLike} removeBlog={removeBlog} user={user}
+            < BlogList key={blog.id} blog={blog}
             />
           )}
         </Route>
       </Switch>
-    </div>
+    </Page>
   )
 }
+
+const Page = styled.div`
+padding:1em;
+background: Ivory;
+`
+
+const Navigation = styled.div`
+paddingRight: 5;
+background: Lavender;
+`
+
+const Button = styled.button`
+background: Ivory;
+&:hover{
+  background:Plum;
+}
+border-radius: 3px;
+margin: 1em;
+padding: 0.25em 1em;
+border: 2px solid Plum;
+`
 
 export default connect(
   null, { setNotification }
