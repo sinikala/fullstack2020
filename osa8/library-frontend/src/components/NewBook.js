@@ -15,6 +15,7 @@ const NewBook = (props) => {
       //setError(error.graphQLErrors[0].message)
     }
   })
+
   if (!props.show) {
     return null
   }

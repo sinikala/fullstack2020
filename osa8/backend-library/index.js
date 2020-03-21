@@ -74,6 +74,7 @@ type Mutation {
   ):Author
   createUser(
     username: String!
+    favoriteGenre: String
   ): User
   login(
     username: String!
@@ -163,7 +164,7 @@ const resolvers = {
     },
 
     createUser: (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
 
       return user.save()
         .catch(error => {

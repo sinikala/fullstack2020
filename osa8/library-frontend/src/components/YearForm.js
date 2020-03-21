@@ -16,6 +16,11 @@ const YearForm = ({ authors }) => {
     }
   })
 
+  const token = localStorage.getItem('library-user-token')
+
+  if (!token) {
+    return null
+  }
   const submit = async (event) => {
     event.preventDefault()
 
@@ -33,6 +38,8 @@ const YearForm = ({ authors }) => {
   const handleChoice = (e) => {
     setName(e.value)
   }
+
+
 
   return (
     <div>

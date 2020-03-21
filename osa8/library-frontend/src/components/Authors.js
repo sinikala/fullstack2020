@@ -16,7 +16,6 @@ const Authors = (props) => {
 
   const authors = result.data.allAuthors
 
-
   return (
     <div>
       <h2>authors</h2>
@@ -40,7 +39,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <YearForm authors={authors} />
+      <YearForm authors={authors} token={props.token} />
 
     </div>
   )
